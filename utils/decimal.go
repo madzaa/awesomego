@@ -20,6 +20,10 @@ func ParseAmount(amount string) (uint64, error) {
 		return 0, fmt.Errorf("amount must be in format '0.00' with exactly 2 decimal places")
 	}
 
+	if amount[0] == '-' {
+		return 0, fmt.Errorf("amount cannot be negative")
+	}
+	
 	parts := strings.Split(amount, ".")
 	majorUnits, err := strconv.ParseUint(parts[0], 10, 64)
 	if err != nil {
