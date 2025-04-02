@@ -14,18 +14,26 @@ import (
 	_ "github.com/lib/pq"
 )
 
-func main() {
-	host := os.Getenv("DB_HOST")
-	if host == "" {
-		host = "localhost"
+func getEnvWithDefault(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
 	}
+	return defaultValue
+}
+
+func main() {
+	host := getEnvWithDefault("DB_HOST", "localhost")
+	user := getEnvWithDefault("DB_USER", "user")
+	password := getEnvWithDefault("DB_PASSWORD", "password")
+	port := getEnvWithDefault("DB_PORT", "5432")
+	dbName := getEnvWithDefault("DB_NAME", "core")
 
 	connStr := fmt.Sprintf("postgres://%s:%s@%s:%s/%s?sslmode=disable",
-		os.Getenv("DB_USER"),
-		os.Getenv("DB_PASSWORD"),
+		user,
+		password,
 		host,
-		os.Getenv("DB_PORT"),
-		os.Getenv("DB_NAME"),
+		port,
+		dbName,
 	)
 
 	db, err := sql.Open("postgres", connStr)
