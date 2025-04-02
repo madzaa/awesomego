@@ -21,15 +21,15 @@ func ParseAmount(amount string) (uint64, error) {
 	}
 
 	parts := strings.Split(amount, ".")
-	dollars, err := strconv.ParseUint(parts[0], 10, 64)
+	majorUnits, err := strconv.ParseUint(parts[0], 10, 64)
 	if err != nil {
 		return 0, fmt.Errorf("invalid amount format: %s", amount)
 	}
 
-	cents, err := strconv.ParseUint(parts[1], 10, 64)
+	minorUnits, err := strconv.ParseUint(parts[1], 10, 64)
 	if err != nil {
-		return 0, fmt.Errorf("invalid cents format: %s", amount)
+		return 0, fmt.Errorf("invalid decimal format: %s", amount)
 	}
 
-	return dollars*100 + cents, nil
+	return majorUnits*100 + minorUnits, nil
 }
